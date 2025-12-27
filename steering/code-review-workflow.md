@@ -1,13 +1,14 @@
 # Code Review Workflow
 
-A comprehensive, step-by-step workflow for performing thorough pull request reviews as a DevOps Engineering Leader.
+A comprehensive, step-by-step workflow for performing thorough pull request and merge request reviews as a DevOps Engineering Leader.
 
 ## When to Use
 
 Use this workflow when:
-- Reviewing pull requests for quality, security, and integration
+- Reviewing pull requests (GitHub, Bitbucket, Azure DevOps)
+- Reviewing merge requests (GitLab)
 - Performing comprehensive code audits
-- Evaluating PRs before merge approval
+- Evaluating changes before merge approval
 - Mentoring team members through review feedback
 
 ## DevOps Leader Mindset
@@ -34,7 +35,7 @@ Evaluate code craftsmanship and maintainability:
 - **Comments**: Complex logic is documented; no misleading comments
 
 ### 2. Completeness Review
-Ensure the PR fully addresses requirements:
+Ensure the PR/MR fully addresses requirements:
 
 - **Requirements Met**: All acceptance criteria are satisfied
 - **Edge Cases**: Boundary conditions and error states are handled
@@ -49,6 +50,7 @@ Identify potential vulnerabilities:
 - **Input Validation**: All user input is validated and sanitized
 - **SQL Injection**: Parameterized queries used; no string concatenation
 - **XSS Prevention**: Output encoding applied; no raw HTML injection
+- **Command Injection**: Shell commands properly escaped
 - **Authentication**: Auth checks present where required
 - **Authorization**: Permission checks enforce access control
 - **Secrets Handling**: No hardcoded credentials; secrets from env/vault
@@ -73,63 +75,61 @@ Evaluate efficiency and scalability:
 - **Memory Usage**: No memory leaks; large objects handled properly
 - **Caching**: Appropriate caching strategies applied
 - **Async Operations**: Long-running tasks don't block
+- **Resource Cleanup**: Connections, files, handles properly closed
 
 ## Step-by-Step Process
 
-### Step 1: Gather PR Context
+### Step 1: Gather Context
 
-```
-Tools to use:
-- get_pull_request: Get PR title, description, author, base/head branches
-- get_pull_request_files: List all changed files with additions/deletions
-- get_pull_request_status: Check CI/CD status
-```
+**Information to collect:**
+- PR/MR title and description
+- Author and reviewers
+- Target branch (main, develop, release)
+- List of changed files
+- Number of additions/deletions
+- CI/CD status (if available)
+- Linked issues or tickets
 
-**What to note:**
-- PR purpose and scope from description
-- Number and type of files changed
-- CI/CD pass/fail status
-- Any linked issues
+**Questions to answer:**
+- What is the purpose of this change?
+- What problem does it solve?
+- What is the scope of impact?
 
 ### Step 2: Analyze Changes
 
-```
-Tools to use:
-- get_file_contents: Read specific files for full context
-- Sequential thinking: Break down analysis systematically
-```
+**Use Sequential Thinking to structure your analysis:**
 
-**Sequential Thinking Structure:**
-- Thought 1: Understand the purpose and scope of the PR
-- Thought 2: Identify the main changes and their impact
-- Thought 3: Review for quality issues (style, organization, DRY)
-- Thought 4: Check completeness (tests, docs, edge cases)
-- Thought 5: Security analysis (vulnerabilities, auth, secrets)
-- Thought 6: Integration concerns (compatibility, breaking changes)
-- Thought 7: Performance implications
-- Thought 8: Synthesize findings and form recommendation
+- **Thought 1**: Understand the purpose and scope of the PR/MR
+- **Thought 2**: Identify the main changes and their impact
+- **Thought 3**: Review for quality issues (style, organization, DRY)
+- **Thought 4**: Check completeness (tests, docs, edge cases)
+- **Thought 5**: Security analysis (vulnerabilities, auth, secrets)
+- **Thought 6**: Integration concerns (compatibility, breaking changes)
+- **Thought 7**: Performance implications
+- **Thought 8**: Synthesize findings and form recommendation
 
 ### Step 3: Document Findings
 
-```
-Tools to use:
-- Memory (create_entities): Store PR review entity
-- Memory (add_observations): Add findings to the entity
-- Memory (create_relations): Link issues to PR
-```
+**Use Memory to store review findings:**
 
-**Entity Structure:**
 ```
-Entity: PR-{repo}-{number}
-Type: PullRequestReview
+Entity: PR-{project}-{number}
+Type: CodeReview
 Observations:
-- Summary: {brief description}
-- Quality: {findings}
-- Security: {findings}
-- Completeness: {findings}
-- Integration: {findings}
+- Summary: {brief description of changes}
+- Quality: {quality findings}
+- Security: {security findings}
+- Completeness: {completeness findings}
+- Integration: {integration findings}
+- Performance: {performance findings}
 - Recommendation: {APPROVE|REQUEST_CHANGES|COMMENT}
 ```
+
+**Benefits of storing in memory:**
+- Reference when author submits updates
+- Track patterns across reviews
+- Maintain consistency in feedback
+- Build knowledge base of common issues
 
 ### Step 4: Provide Recommendation
 
@@ -153,31 +153,31 @@ Observations:
 - Reviewing your own PR (can't approve)
 - Want discussion before decision
 
-### Step 5: Submit Review
+### Step 5: Communicate Feedback
 
-```
-Tools to use:
-- create_pull_request_review: Submit the review with findings
-- create_issue: Create issues for improvements (optional)
-- add_issue_comment: Add follow-up comments if needed
-```
+**Structure your feedback clearly:**
+1. Start with a summary of what the PR/MR does
+2. Acknowledge what was done well
+3. List issues by severity (critical first)
+4. Provide specific, actionable recommendations
+5. End with clear recommendation (approve/changes/comment)
 
 ## Review Checklist Template
 
 Use this template to structure your review output:
 
 ```markdown
-## PR Review: #{number} - {title}
+## Code Review: {title}
 
-**Repository:** {owner}/{repo}
+**Project:** {project/repo}
 **Author:** {author}
-**Branch:** {head} → {base}
+**Branch:** {source} → {target}
 **Files Changed:** {count} ({additions}+ / {deletions}-)
 
 ---
 
 ### Summary
-{Brief description of what this PR does and why}
+{Brief description of what this PR/MR does and why}
 
 ### Quality Assessment
 | Criteria | Status | Notes |
@@ -211,14 +211,20 @@ Use this template to structure your review output:
 | Breaking Changes | ✅/⚠️/❌ | {notes} |
 | Dependencies | ✅/⚠️/❌ | {notes} |
 
+### Performance Assessment
+| Criteria | Status | Notes |
+|----------|--------|-------|
+| Algorithm Efficiency | ✅/⚠️/❌ | {notes} |
+| Database Queries | ✅/⚠️/❌ | {notes} |
+| Resource Management | ✅/⚠️/❌ | {notes} |
+
 ---
 
 ### Issues Found
 
-{For each issue:}
-#### Issue {n}: {title}
+#### Issue 1: {title}
 - **Severity:** Critical / High / Medium / Low
-- **Category:** Quality / Security / Completeness / Integration
+- **Category:** Quality / Security / Completeness / Integration / Performance
 - **Location:** {file}:{line}
 - **Description:** {what's wrong}
 - **Recommendation:** {how to fix}
@@ -229,13 +235,11 @@ Use this template to structure your review output:
 
 **Reasoning:** {explanation of decision}
 
-{If REQUEST_CHANGES:}
-**Required Changes:**
+**Required Changes:** (if applicable)
 1. {change 1}
 2. {change 2}
 
-{If APPROVE:}
-**Commendations:**
+**Commendations:** (if applicable)
 - {what was done well}
 ```
 
@@ -246,54 +250,72 @@ Use this template to structure your review output:
 - Data loss or corruption risk
 - Breaking changes without migration path
 - Production stability risk
+- Compliance violations
 
 ### High (Strongly Recommend Fix)
 - Missing error handling for likely failure cases
 - Performance issues affecting user experience
 - Missing tests for critical paths
 - Incomplete implementation of requirements
+- Potential data integrity issues
 
 ### Medium (Should Fix)
 - Code quality issues affecting maintainability
 - Missing edge case handling
 - Inadequate logging
 - Minor security hardening needed
+- Technical debt introduction
 
 ### Low (Nice to Have)
 - Style preferences beyond standards
 - Minor optimization opportunities
 - Documentation improvements
 - Refactoring suggestions
+- Code clarity enhancements
 
 ## Common Patterns to Flag
 
 ### Security Red Flags
+
+**SQL Injection:**
 ```python
-# ❌ SQL Injection
+# ❌ Vulnerable
 query = f"SELECT * FROM users WHERE id = {user_id}"
 
-# ✅ Parameterized Query
+# ✅ Safe
 query = "SELECT * FROM users WHERE id = %s"
 cursor.execute(query, (user_id,))
 ```
 
+**Hardcoded Secrets:**
 ```python
-# ❌ Hardcoded Secrets
+# ❌ Exposed
 API_KEY = "sk-abc123xyz"
 
-# ✅ Environment Variable
+# ✅ Secure
 API_KEY = os.environ.get("API_KEY")
 ```
 
-### Quality Red Flags
+**Command Injection:**
 ```python
-# ❌ Bare Exception
+# ❌ Vulnerable
+os.system(f"process {user_input}")
+
+# ✅ Safe
+subprocess.run(["process", user_input], shell=False)
+```
+
+### Quality Red Flags
+
+**Bare Exception:**
+```python
+# ❌ Swallows errors
 try:
     do_something()
 except:
     pass
 
-# ✅ Specific Exception with Handling
+# ✅ Proper handling
 try:
     do_something()
 except ValueError as e:
@@ -301,12 +323,58 @@ except ValueError as e:
     raise
 ```
 
+**Magic Numbers:**
+```python
+# ❌ Unclear
+if retry_count > 3:
+    raise Exception("Failed")
+
+# ✅ Clear
+MAX_RETRIES = 3
+if retry_count > MAX_RETRIES:
+    raise RetryLimitExceeded(f"Failed after {MAX_RETRIES} attempts")
+```
+
 ### Completeness Red Flags
 - New API endpoint without tests
 - Database migration without rollback
 - New feature without documentation
 - Error paths without handling
+- Configuration without defaults
+
+### Performance Red Flags
+- N+1 database queries in loops
+- Loading entire datasets into memory
+- Synchronous operations that should be async
+- Missing database indexes for frequent queries
+- Unbounded result sets
+
+## Language-Specific Considerations
+
+### Python
+- Type hints for function signatures
+- Docstrings for public functions
+- Use of context managers for resources
+- Proper exception hierarchy
+
+### JavaScript/TypeScript
+- Proper async/await usage
+- Type safety (TypeScript)
+- Memory leak prevention (event listeners)
+- Proper error boundaries (React)
+
+### Java
+- Proper resource management (try-with-resources)
+- Null safety considerations
+- Thread safety for shared state
+- Proper exception handling hierarchy
+
+### Go
+- Error handling (don't ignore returned errors)
+- Proper goroutine management
+- Context propagation
+- Defer for cleanup
 
 ---
 
-**Remember:** As a DevOps leader, your review protects production. Be thorough, be fair, and be constructive.
+**Remember:** As a DevOps leader, your review protects production. Be thorough, be fair, and be constructive. Your feedback helps the team grow.

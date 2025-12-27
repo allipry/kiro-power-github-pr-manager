@@ -1,14 +1,14 @@
-# GitHub PR Manager - Kiro Power
+# Git PR Reviewer - Kiro Power
 
-A comprehensive Kiro Power for managing GitHub pull requests, performing code reviews, and pushing fixes to repositories with a built-in DevOps leader persona.
+A comprehensive Kiro Power for reviewing pull requests and merge requests across Git platforms with a built-in DevOps leader persona.
 
 ## Features
 
-- **Pull Request Management**: Create, review, and manage PRs directly from Kiro
-- **Comprehensive Code Reviews**: Structured review process covering quality, security, completeness, and integration
+- **Platform Agnostic**: Works with GitHub, GitLab, Bitbucket, Azure DevOps, and more
+- **Comprehensive Code Reviews**: Structured review process covering quality, security, completeness, integration, and performance
 - **DevOps Leader Persona**: Expert code review mindset focused on production stability and security
 - **Sequential Thinking**: Methodical analysis for complex code changes
-- **Memory Integration**: Track review findings across sessions
+- **Memory Integration**: Track review findings across sessions for consistency
 
 ## Installation
 
@@ -21,47 +21,59 @@ A comprehensive Kiro Power for managing GitHub pull requests, performing code re
 5. Enter: `https://github.com/allipry/kiro-power-github-pr-manager`
 6. Click "Add"
 
-### Configuration Required
+### No Configuration Required
 
-After installation, you **must** configure your GitHub Personal Access Token:
+This power works out of the box with sequential-thinking and memory servers. No API tokens needed for basic usage.
 
-1. Generate a PAT at https://github.com/settings/tokens
-2. Select scopes: `repo`, `workflow`
-3. Edit the power's `mcp.json` file
-4. Replace `YOUR_GITHUB_PAT_HERE` with your actual token
+### Optional: Platform API Integration
+
+For automated API operations, add platform-specific MCP servers to your configuration. See POWER.md for examples.
 
 ## Usage
 
-### Review a Pull Request
+### Review Code Changes
 
 ```
-Review PR #42 in owner/repo for quality, security, and integration.
+Review this pull request for quality, security, and integration.
 Provide a recommendation as a DevOps leader.
+
+[Paste PR description and diff here]
 ```
 
-### Create a Pull Request
+### Review with Focus Area
 
 ```
-Create a pull request in owner/repo to fix the bug in app.py.
+As a DevOps engineering leader, review these changes to the 
+authentication module. Focus on security implications.
+
+[Paste code changes]
 ```
 
-### List Open PRs
+### Track Findings
 
 ```
-List open pull requests in owner/repo and summarize their status.
+Store the findings from this review in memory so I can 
+reference them when the author submits updates.
 ```
 
 ## MCP Servers Used
 
-- **@modelcontextprotocol/server-github** - GitHub API operations
 - **@modelcontextprotocol/server-sequential-thinking** - Structured analysis
 - **@modelcontextprotocol/server-memory** - Review tracking
 
 ## Files
 
-- `POWER.md` - Main documentation and configuration guide
-- `mcp.json` - MCP server configuration (requires PAT setup)
+- `POWER.md` - Main documentation and usage guide
+- `mcp.json` - MCP server configuration
 - `steering/code-review-workflow.md` - Detailed code review process
+
+## Review Categories
+
+1. **Quality** - Code style, naming, organization, error handling
+2. **Completeness** - Requirements, tests, documentation, edge cases
+3. **Security** - Input validation, injection prevention, auth, secrets
+4. **Integration** - API compatibility, breaking changes, dependencies
+5. **Performance** - Algorithm efficiency, queries, resource management
 
 ## License
 
